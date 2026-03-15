@@ -1,156 +1,163 @@
 "use client";
-import React, { useRef, useMemo, useState, useCallback, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Html, useTexture } from "@react-three/drei";
-import * as THREE from "three";
-import { cn } from "../../lib/utils";
+import { useEffect, useRef, useState } from "react";
+import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
+import ThreeGlobe from "three-globe";
+import { useThree, Canvas, extend } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import countries from "../../data/globe.json";
 
-function latLngToVector3(lat, lng, radius) {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lng + 180) * (Math.PI / 180);
-  return new THREE.Vector3(
-    -(radius * Math.sin(phi) * Math.cos(theta)),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.sin(theta)
-  );
+extend({ ThreeGlobe: ThreeGlobe });
+
+const RING_PROPAGATION_SPEED = 3;
+const aspect = 1.2;
+const cameraZ = 300;
+
+export function Globe({ globeConfig, data }) {
+  const globeRef = useRef(null);
+  const groupRef = useRef();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const defaultProps = {
+    pointSize: 1,
+    atmosphereColor: "#ffffff",
+    showAtmosphere: true,
+    atmosphereAltitude: 0.1,
+    polygonColor: "rgba(255,255,255,0.7)",
+    globeColor: "#1d072e",
+    emissive: "#000000",
+    emissiveIntensity: 0.1,
+    shininess: 0.9,
+    arcTime: 2000,
+    arcLength: 0.9,
+    rings: 1,
+    maxRings: 3,
+    ...globeConfig,
+  };
+
+  useEffect(() => {
+    if (!globeRef.current && groupRef.current) {
+      globeRef.current = new ThreeGlobe();
+      groupRef.current.add(globeRef.current);
+      setIsInitialized(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!globeRef.current || !isInitialized) return;
+    const globeMaterial = globeRef.current.globeMaterial();
+    globeMaterial.color = new Color(globeConfig.globeColor);
+    globeMaterial.emissive = new Color(globeConfig.emissive);
+    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
+    globeMaterial.shininess = globeConfig.shininess || 0.9;
+  }, [isInitialized, globeConfig.globeColor, globeConfig.emissive, globeConfig.emissiveIntensity, globeConfig.shininess]);
+
+  useEffect(() => {
+    if (!globeRef.current || !isInitialized || !data) return;
+
+    const arcs = data;
+    let points = [];
+    for (let i = 0; i < arcs.length; i++) {
+      const arc = arcs[i];
+      points.push({ size: defaultProps.pointSize, order: arc.order, color: arc.color, lat: arc.startLat, lng: arc.startLng });
+      points.push({ size: defaultProps.pointSize, order: arc.order, color: arc.color, lat: arc.endLat, lng: arc.endLng });
+    }
+
+    const filteredPoints = points.filter((v, i, a) =>
+      a.findIndex((v2) => ["lat", "lng"].every((k) => v2[k] === v[k])) === i
+    );
+
+    globeRef.current
+      .hexPolygonsData(countries.features)
+      .hexPolygonResolution(3)
+      .hexPolygonMargin(0.7)
+      .showAtmosphere(defaultProps.showAtmosphere)
+      .atmosphereColor(defaultProps.atmosphereColor)
+      .atmosphereAltitude(defaultProps.atmosphereAltitude)
+      .hexPolygonColor(() => defaultProps.polygonColor);
+
+    globeRef.current
+      .arcsData(data)
+      .arcStartLat((d) => d.startLat * 1)
+      .arcStartLng((d) => d.startLng * 1)
+      .arcEndLat((d) => d.endLat * 1)
+      .arcEndLng((d) => d.endLng * 1)
+      .arcColor((e) => e.color)
+      .arcAltitude((e) => e.arcAlt * 1)
+      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
+      .arcDashLength(defaultProps.arcLength)
+      .arcDashInitialGap((e) => e.order * 1)
+      .arcDashGap(15)
+      .arcDashAnimateTime(() => defaultProps.arcTime);
+
+    globeRef.current
+      .pointsData(filteredPoints)
+      .pointColor((e) => e.color)
+      .pointsMerge(true)
+      .pointAltitude(0.0)
+      .pointRadius(2);
+
+    globeRef.current
+      .ringsData([])
+      .ringColor(() => defaultProps.polygonColor)
+      .ringMaxRadius(defaultProps.maxRings)
+      .ringPropagationSpeed(RING_PROPAGATION_SPEED)
+      .ringRepeatPeriod((defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings);
+  }, [isInitialized, data]);
+
+  useEffect(() => {
+    if (!globeRef.current || !isInitialized || !data) return;
+    const interval = setInterval(() => {
+      if (!globeRef.current) return;
+      const newNumbers = genRandomNumbers(0, data.length, Math.floor((data.length * 4) / 5));
+      const ringsData = data.filter((d, i) => newNumbers.includes(i)).map((d) => ({ lat: d.startLat, lng: d.startLng, color: d.color }));
+      globeRef.current.ringsData(ringsData);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [isInitialized, data]);
+
+  return <group ref={groupRef} />;
 }
 
-function Marker({ marker, radius, defaultSize, onClick, onHover }) {
-  const [hovered, setHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const groupRef = useRef(null);
-  const imageGroupRef = useRef(null);
-  const { camera } = useThree();
+export function WebGLRendererConfig() {
+  const { gl, size } = useThree();
+  useEffect(() => {
+    gl.setPixelRatio(window.devicePixelRatio);
+    gl.setSize(size.width, size.height);
+    gl.setClearColor(0xffaaff, 0);
+  }, []);
+  return null;
+}
 
-  const surfacePosition = useMemo(() => latLngToVector3(marker.lat, marker.lng, radius * 1.001), [marker.lat, marker.lng, radius]);
-  const topPosition = useMemo(() => latLngToVector3(marker.lat, marker.lng, radius * 1.18), [marker.lat, marker.lng, radius]);
-  const lineHeight = topPosition.distanceTo(surfacePosition);
-
-  useFrame(() => {
-    if (!imageGroupRef.current) return;
-    const worldPos = new THREE.Vector3();
-    imageGroupRef.current.getWorldPosition(worldPos);
-    setIsVisible(worldPos.clone().normalize().dot(camera.position.clone().normalize()) > 0.1);
-  });
-
-  const { lineCenter, lineQuaternion } = useMemo(() => {
-    const center = surfacePosition.clone().lerp(topPosition, 0.5);
-    const direction = topPosition.clone().sub(surfacePosition).normalize();
-    const quaternion = new THREE.Quaternion();
-    quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
-    return { lineCenter: center, lineQuaternion: quaternion };
-  }, [surfacePosition, topPosition]);
-
+export function World(props) {
+  const { globeConfig } = props;
+  const scene = new Scene();
+  scene.fog = new Fog(0xffffff, 400, 2000);
   return (
-    <group ref={groupRef} visible={isVisible}>
-      <mesh position={lineCenter} quaternion={lineQuaternion}>
-        <cylinderGeometry args={[0.003, 0.003, lineHeight, 8]} />
-        <meshBasicMaterial color={hovered ? "#ffffff" : "#4ade80"} transparent opacity={hovered ? 0.9 : 0.4} />
-      </mesh>
-      <mesh position={surfacePosition} quaternion={lineQuaternion}>
-        <coneGeometry args={[0.015, 0.04, 8]} />
-        <meshBasicMaterial color={hovered ? "#ffffff" : "#4ade80"} />
-      </mesh>
-      <group ref={imageGroupRef} position={topPosition}>
-        <Html transform center sprite distanceFactor={10}
-          style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
-          <div
-            className={cn("cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200",
-              hovered ? "bg-emerald-400 text-black scale-110 shadow-lg shadow-emerald-400/30" : "bg-neutral-900/80 text-emerald-400 border border-emerald-400/30 backdrop-blur-sm")}
-            onMouseEnter={() => { setHovered(true); onHover?.(marker); }}
-            onMouseLeave={() => { setHovered(false); onHover?.(null); }}
-            onClick={() => onClick?.(marker)}>
-            {marker.label || "●"}
-          </div>
-        </Html>
-      </group>
-    </group>
+    <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
+      <WebGLRendererConfig />
+      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+      <directionalLight color={globeConfig.directionalLeftLight} position={new Vector3(-400, 100, 400)} />
+      <directionalLight color={globeConfig.directionalTopLight} position={new Vector3(-200, 500, 200)} />
+      <pointLight color={globeConfig.pointLight} position={new Vector3(-200, 500, 200)} intensity={0.8} />
+      <Globe {...props} />
+      <OrbitControls enablePan={false} enableZoom={false} minDistance={cameraZ} maxDistance={cameraZ}
+        autoRotateSpeed={1} autoRotate={true} minPolarAngle={Math.PI / 3.5} maxPolarAngle={Math.PI - Math.PI / 3} />
+    </Canvas>
   );
 }
 
-function Atmosphere({ radius, color, intensity, blur }) {
-  const fresnelPower = Math.max(0.5, 5 - blur);
-  const atmosphereMaterial = useMemo(() => new THREE.ShaderMaterial({
-    uniforms: {
-      atmosphereColor: { value: new THREE.Color(color) },
-      intensity: { value: intensity },
-      fresnelPower: { value: fresnelPower },
-    },
-    vertexShader: `
-      varying vec3 vNormal; varying vec3 vPosition;
-      void main() { vNormal = normalize(normalMatrix * normal); vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
-    `,
-    fragmentShader: `
-      uniform vec3 atmosphereColor; uniform float intensity; uniform float fresnelPower;
-      varying vec3 vNormal; varying vec3 vPosition;
-      void main() { float fresnel = pow(1.0 - abs(dot(vNormal, normalize(-vPosition))), fresnelPower); gl_FragColor = vec4(atmosphereColor, fresnel * intensity); }
-    `,
-    side: THREE.BackSide, transparent: true, depthWrite: false,
-  }), [color, intensity, fresnelPower]);
-
-  return <mesh scale={[1.12, 1.12, 1.12]}><sphereGeometry args={[radius, 64, 32]} /><primitive object={atmosphereMaterial} attach="material" /></mesh>;
+export function hexToRgb(hex) {
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
 }
 
-function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover }) {
-  const groupRef = useRef(null);
-  const geometry = useMemo(() => new THREE.SphereGeometry(config.radius, 64, 64), [config.radius]);
-
-  // Custom green sphere instead of Earth texture
-  return (
-    <group ref={groupRef}>
-      <mesh geometry={geometry}>
-        <meshStandardMaterial color={config.globeColor} roughness={0.8} metalness={0.1} transparent opacity={0.15} />
-      </mesh>
-      <mesh geometry={new THREE.SphereGeometry(config.radius * 1.002, 48, 24)}>
-        <meshBasicMaterial color="#4ade80" wireframe transparent opacity={0.06} />
-      </mesh>
-      {markers.map((marker, index) => (
-        <Marker key={`marker-${index}`} marker={marker} radius={config.radius} defaultSize={config.markerSize}
-          onClick={onMarkerClick} onHover={onMarkerHover} />
-      ))}
-    </group>
-  );
+export function genRandomNumbers(min, max, count) {
+  const arr = [];
+  while (arr.length < count) {
+    const r = Math.floor(Math.random() * (max - min)) + min;
+    if (arr.indexOf(r) === -1) arr.push(r);
+  }
+  return arr;
 }
-
-function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
-  const { camera } = useThree();
-  React.useEffect(() => { camera.position.set(0, 0, config.radius * 3.5); camera.lookAt(0, 0, 0); }, [camera, config.radius]);
-
-  return (
-    <>
-      <ambientLight intensity={config.ambientIntensity} />
-      <directionalLight position={[config.radius * 5, config.radius * 2, config.radius * 5]} intensity={config.pointLightIntensity} />
-      <RotatingGlobe config={config} markers={markers} onMarkerClick={onMarkerClick} onMarkerHover={onMarkerHover} />
-      {config.showAtmosphere && <Atmosphere radius={config.radius} color={config.atmosphereColor} intensity={config.atmosphereIntensity} blur={config.atmosphereBlur} />}
-      <OrbitControls makeDefault enablePan={false} enableZoom={false} rotateSpeed={0.4}
-        autoRotate={config.autoRotateSpeed > 0} autoRotateSpeed={config.autoRotateSpeed} enableDamping dampingFactor={0.1} />
-    </>
-  );
-}
-
-const defaultConfig = {
-  radius: 2, globeColor: "#0a2a1a", showAtmosphere: true,
-  atmosphereColor: "#4ade80", atmosphereIntensity: 0.6, atmosphereBlur: 2,
-  bumpScale: 1, autoRotateSpeed: 0.3, enableZoom: false, enablePan: false,
-  minDistance: 5, maxDistance: 15, markerSize: 0.06,
-  showWireframe: true, wireframeColor: "#4ade80",
-  ambientIntensity: 0.4, pointLightIntensity: 1.2, backgroundColor: null,
-};
-
-export function Globe3D({ markers = [], config = {}, className, onMarkerClick, onMarkerHover }) {
-  const mergedConfig = useMemo(() => ({ ...defaultConfig, ...config }), [config]);
-
-  return (
-    <div className={cn("relative h-[500px] w-full", className)}>
-      <Canvas gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }} dpr={[1, 2]}
-        camera={{ fov: 45, near: 0.1, far: 1000, position: [0, 0, mergedConfig.radius * 3.5] }}
-        style={{ background: "transparent" }}>
-        <Suspense fallback={<Html center><span className="text-sm text-neutral-500">Loading...</span></Html>}>
-          <Scene markers={markers} config={mergedConfig} onMarkerClick={onMarkerClick} onMarkerHover={onMarkerHover} />
-        </Suspense>
-      </Canvas>
-    </div>
-  );
-}
-
-export default Globe3D;
