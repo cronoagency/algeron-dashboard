@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import * as mqtt from "mqtt/dist/mqtt.min";
+import * as mqttModule from "mqtt/dist/mqtt.min";
+const mqtt = mqttModule.default || mqttModule;
 
-const MQTT_URL = "ws://192.168.1.219:9001";
+// Usa ws:// se HTTP, wss:// se HTTPS
+const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:';
+const MQTT_URL = isSecure ? "wss://192.168.1.219:9001" : "ws://192.168.1.219:9001";
 const INPUT_TOPIC = "algeron/terminal/input";
 const OUTPUT_TOPIC = "algeron/terminal/output";
 
