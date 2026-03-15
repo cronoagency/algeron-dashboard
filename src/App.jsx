@@ -28,7 +28,7 @@ export default function App() {
           atmosphereIntensity: 20,
           bumpScale: 5,
           autoRotateSpeed: 0.3,
-          cameraOffset: { x: 0, y: -2.5, z: 0 },
+          globeOffset: 4,
         }}
         onMarkerClick={(marker) => console.log("Clicked:", marker.label)}
         onMarkerHover={(marker) => marker && console.log("Hovering:", marker.label)}

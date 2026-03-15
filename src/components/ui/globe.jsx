@@ -138,16 +138,17 @@ function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover }) {
 function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
   const { camera } = useThree();
   React.useEffect(() => {
-    // Camera guarda il globo dall'alto — il globo è spostato in basso
-    camera.position.set(0, config.radius * 2, config.radius * 4);
-    camera.lookAt(0, -config.radius * 1.5, 0);
+    camera.position.set(0, 0, config.radius * 3.5);
+    camera.lookAt(0, 0, 0);
   }, [camera, config.radius]);
   return (
     <>
       <ambientLight intensity={config.ambientIntensity || 0.6} />
       <directionalLight position={[config.radius * 5, config.radius * 2, config.radius * 5]} intensity={config.pointLightIntensity || 1.5} color="#ffffff" />
       <directionalLight position={[-config.radius * 3, config.radius, -config.radius * 2]} intensity={(config.pointLightIntensity || 1.5) * 0.3} color="#88ccff" />
-      <RotatingGlobe config={config} markers={markers} onMarkerClick={onMarkerClick} onMarkerHover={onMarkerHover} />
+      <group position={[0, -(config.globeOffset || 0), 0]}>
+        <RotatingGlobe config={config} markers={markers} onMarkerClick={onMarkerClick} onMarkerHover={onMarkerHover} />
+      </group>
       {config.showAtmosphere && <Atmosphere radius={config.radius} color={config.atmosphereColor || "#4da6ff"} intensity={config.atmosphereIntensity || 0.5} blur={config.atmosphereBlur || 2} />}
       <OrbitControls makeDefault enablePan={false} enableZoom={false} rotateSpeed={0.4}
         autoRotate={config.autoRotateSpeed > 0} autoRotateSpeed={config.autoRotateSpeed || 0.3} enableDamping dampingFactor={0.1} />
