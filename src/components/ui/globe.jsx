@@ -58,23 +58,23 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
         <meshBasicMaterial color={hovered ? "#4ade80" : "#4ade80"} transparent opacity={hovered ? 1 : 0.6} />
       </mesh>
       <group ref={imageGroupRef} position={topPosition}>
-        <Html transform center sprite distanceFactor={5}
+        <Html transform center sprite distanceFactor={4}
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
           <span
             style={{
-              fontSize: '5px',
-              color: hovered ? '#fff' : 'rgba(255,255,255,0.7)',
+              fontSize: '8px',
+              color: hovered ? '#fff' : 'rgba(255,255,255,0.8)',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
-              background: 'rgba(255,255,255,0.06)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              padding: '1px 3px',
-              borderRadius: '1.5px',
-              border: '0.3px solid rgba(255,255,255,0.08)',
-              letterSpacing: '0.02em',
+              fontWeight: 500,
+              background: 'rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              padding: '3px 8px',
+              borderRadius: '3px',
+              border: '0.5px solid rgba(255,255,255,0.12)',
+              letterSpacing: '0.03em',
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
             {marker.label}
