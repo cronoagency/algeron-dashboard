@@ -1,63 +1,54 @@
-import { motion } from "motion/react";
-import { World } from "./components/ui/globe";
-import { Meteors } from "./components/ui/meteors";
+import { Globe3D } from "./components/ui/globe";
 
-// Arc data — connections between our "sections" as globe arcs
-const globeData = [
-  { order: 1, startLat: 41.9, startLng: 12.5, endLat: 51.5, endLng: -0.1, arcAlt: 0.3, color: "#4ade80" },  // Roma → London (Trade)
-  { order: 2, startLat: 41.9, startLng: 12.5, endLat: 35.7, endLng: 139.7, arcAlt: 0.4, color: "#4ade80" },  // Roma → Tokyo (Memoria)
-  { order: 3, startLat: 41.9, startLng: 12.5, endLat: 40.7, endLng: -74.0, arcAlt: 0.3, color: "#22d3ee" },  // Roma → NYC (Sistemi)
-  { order: 4, startLat: 41.9, startLng: 12.5, endLat: -33.9, endLng: 151.2, arcAlt: 0.5, color: "#4ade80" }, // Roma → Sydney (Blog)
-  { order: 5, startLat: 51.5, startLng: -0.1, endLat: 35.7, endLng: 139.7, arcAlt: 0.3, color: "#a78bfa" },  // London → Tokyo
-  { order: 6, startLat: 40.7, startLng: -74.0, endLat: -33.9, endLng: 151.2, arcAlt: 0.4, color: "#22d3ee" }, // NYC → Sydney
-  { order: 7, startLat: 48.9, startLng: 2.3, endLat: 41.9, endLng: 12.5, arcAlt: 0.1, color: "#4ade80" },    // Paris → Roma (Agenzia)
-  { order: 8, startLat: 55.8, startLng: 37.6, endLat: 41.9, endLng: 12.5, arcAlt: 0.2, color: "#a78bfa" },   // Moscow → Roma (Display)
-  { order: 9, startLat: 1.3, startLng: 103.8, endLat: 41.9, endLng: 12.5, arcAlt: 0.4, color: "#22d3ee" },   // Singapore → Roma
-  { order: 10, startLat: 34.1, startLng: -118.2, endLat: 41.9, endLng: 12.5, arcAlt: 0.3, color: "#4ade80" }, // LA → Roma (File)
+const sampleMarkers = [
+  { lat: 40.7128, lng: -74.006, src: "https://assets.aceternity.com/avatars/1.webp", label: "New York" },
+  { lat: 51.5074, lng: -0.1278, src: "https://assets.aceternity.com/avatars/2.webp", label: "London" },
+  { lat: 35.6762, lng: 139.6503, src: "https://assets.aceternity.com/avatars/3.webp", label: "Tokyo" },
+  { lat: -33.8688, lng: 151.2093, src: "https://assets.aceternity.com/avatars/4.webp", label: "Sydney" },
+  { lat: 48.8566, lng: 2.3522, src: "https://assets.aceternity.com/avatars/5.webp", label: "Paris" },
+  { lat: 28.6139, lng: 77.209, src: "https://assets.aceternity.com/avatars/6.webp", label: "New Delhi" },
+  { lat: 55.7558, lng: 37.6173, src: "https://assets.aceternity.com/avatars/7.webp", label: "Moscow" },
+  { lat: -22.9068, lng: -43.1729, src: "https://assets.aceternity.com/avatars/8.webp", label: "Rio de Janeiro" },
+  { lat: 31.2304, lng: 121.4737, src: "https://assets.aceternity.com/avatars/9.webp", label: "Shanghai" },
+  { lat: 25.2048, lng: 55.2708, src: "https://assets.aceternity.com/avatars/10.webp", label: "Dubai" },
+  { lat: -34.6037, lng: -58.3816, src: "https://assets.aceternity.com/avatars/11.webp", label: "Buenos Aires" },
+  { lat: 1.3521, lng: 103.8198, src: "https://assets.aceternity.com/avatars/12.webp", label: "Singapore" },
+  { lat: 37.5665, lng: 126.978, src: "https://assets.aceternity.com/avatars/13.webp", label: "Seoul" },
 ];
 
-const globeConfig = {
-  pointSize: 4,
-  globeColor: "#062056",
-  showAtmosphere: true,
-  atmosphereColor: "#4ade80",
-  atmosphereAltitude: 0.15,
-  emissive: "#062056",
-  emissiveIntensity: 0.1,
-  shininess: 0.9,
-  polygonColor: "rgba(255,255,255,0.7)",
-  ambientLight: "#38bdf8",
-  directionalLeftLight: "#ffffff",
-  directionalTopLight: "#ffffff",
-  pointLight: "#ffffff",
-  arcTime: 1000,
-  arcLength: 0.9,
-  rings: 1,
-  maxRings: 3,
-  autoRotate: true,
-  autoRotateSpeed: 0.5,
-};
-
-function App() {
+export default function App() {
   return (
-    <div className="relative w-screen h-screen bg-black overflow-hidden flex items-center justify-center">
-      {/* Globe */}
-      <div className="absolute inset-0">
-        <World globeConfig={globeConfig} data={globeData} />
+    <div className="relative mx-auto h-[400px] w-full max-w-7xl overflow-hidden rounded-xl bg-white shadow-sm ring-1 shadow-black/10 ring-black/10 dark:bg-neutral-950">
+      <div className="relative z-10 p-4 md:p-12">
+        <h2 className="mb-4 max-w-2xl text-2xl font-extrabold tracking-tight text-balance text-neutral-900 md:text-5xl lg:text-6xl dark:text-white">
+          Play all over the world with a click.
+        </h2>
+        <p className="mt-2 max-w-lg text-balance text-neutral-600 md:mt-8 md:text-lg dark:text-neutral-400">
+          Sign up for an account and start posting all over the world with one click.
+        </p>
+        <div className="mt-4 flex gap-4 md:mt-8">
+          <button className="flex cursor-pointer items-center justify-center rounded-lg bg-neutral-900 px-4 py-2 font-medium text-white shadow-[0px_0px_10px_0px_rgba(255,255,255,0.2)_inset] ring ring-white/20 ring-offset-2 ring-offset-neutral-900 transition-all duration-200 ring-inset hover:shadow-[0px_0px_20px_0px_rgba(255,255,255,0.4)_inset] hover:ring-white/40 active:scale-98">
+            Get Started
+          </button>
+          <button className="flex cursor-pointer items-center justify-center rounded-lg bg-white px-4 py-2 font-medium text-neutral-900 ring ring-neutral-200 transition-all duration-200 ring-inset hover:bg-neutral-50 hover:ring-neutral-300 active:scale-98">
+            Learn More
+          </button>
+        </div>
       </div>
-
-      {/* Bottom label */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-        <motion.div
-          className="text-xs text-emerald-400/60 font-mono tracking-wider"
-          animate={{ opacity: [0.4, 0.8, 0.4] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          AlgerON · Online
-        </motion.div>
+      <div className="absolute -right-72 -bottom-96 z-10 size-160 md:-bottom-80 md:size-180">
+        <Globe3D
+          className="h-full w-full"
+          markers={sampleMarkers}
+          config={{
+            atmosphereColor: "#4da6ff",
+            atmosphereIntensity: 20,
+            bumpScale: 5,
+            autoRotateSpeed: 0.3,
+          }}
+          onMarkerClick={(marker) => console.log("Clicked:", marker.label)}
+          onMarkerHover={(marker) => marker && console.log("Hovering:", marker.label)}
+        />
       </div>
     </div>
   );
 }
-
-export default App;
