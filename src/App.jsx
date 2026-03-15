@@ -23,7 +23,7 @@ export default function App() {
       {/* Globe */}
       <motion.div
         className="absolute inset-0"
-        animate={{ y: activeSection ? 100 : 0 }}
+        animate={{ y: activeSection ? 150 : 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 25 }}
       >
         <Globe3D
@@ -35,7 +35,7 @@ export default function App() {
             atmosphereIntensity: 20,
             bumpScale: 5,
             autoRotateSpeed: 0.3,
-            globeOffset: 5,
+            globeOffset: 4,
           }}
           onMarkerClick={(marker) => setActiveSection(activeSection?.label === marker.label ? null : marker)}
           onMarkerHover={(marker) => {}}
