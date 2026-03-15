@@ -74,7 +74,7 @@ export function Terminal() {
         <div className={"w-1.5 h-1.5 rounded-full flex-shrink-0 " + (connected ? "bg-emerald-400" : "bg-red-400")} />
         <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown}
           placeholder="Parla con AlgerON..."
-          className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white placeholder-zinc-600 outline-none focus:border-white/[0.15] transition-colors" />
+          className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-[16px] text-white placeholder-zinc-600 outline-none focus:border-white/[0.15] transition-colors" />
         <button onClick={send} className="text-xs text-zinc-500 hover:text-white transition-colors px-2">↵</button>
       </div>
     </div>
