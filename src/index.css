@@ -1,48 +1,19 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #0b0d0f;
-  --surface: #161a1e;
-  --surface-2: #1c2127;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-node: rgba(74, 222, 128, 0.15);
-  --border-node-hover: rgba(74, 222, 128, 0.3);
+  --bg: #0a0a0a;
   --accent: #4ade80;
-  --accent-dim: rgba(74, 222, 128, 0.15);
-  --accent-glow: rgba(74, 222, 128, 0.4);
-  --text: #a1a1aa;
-  --text-dim: #52525b;
-  --text-bright: #e4e4e7;
-  --text-white: #fafafa;
-  --node-bg: linear-gradient(180deg, #1a1f24 0%, #13171b 100%);
-  --node-border: #2a2f35;
-  --panel-bg: rgba(22, 26, 30, 0.95);
-  --green-gradient: linear-gradient(90deg, #166534 0%, #4ade80 50%, #166534 100%);
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background: #0a0a0a;
   overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 18px 18px;
 }
-
-#root { height: 100vh; width: 100vw; position: relative; }
 
 /* React Flow overrides */
 .react-flow__background { display: none !important; }
 .react-flow__attribution { display: none !important; }
 .react-flow__controls { display: none !important; }
 .react-flow__minimap { display: none !important; }
-.react-flow__pane { cursor: default !important; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2a2f35; border-radius: 2px; }

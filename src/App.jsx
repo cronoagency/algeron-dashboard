@@ -10,6 +10,7 @@ import '@xyflow/react/dist/style.css';
 import OrbNode from './components/OrbNode';
 import SystemNode from './components/SystemNode';
 import AnimatedEdge from './components/AnimatedEdge';
+import { BackgroundBeams } from './components/BackgroundBeams';
 
 const nodeTypes = { orb: OrbNode, system: SystemNode };
 const edgeTypes = { animated: AnimatedEdge };
@@ -97,67 +98,39 @@ function App() {
   }, [setEdges]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      {/* Keyframes */}
-      <style>{`
-        @keyframes edgeFlow {
-          to { stroke-dashoffset: -36; }
-        }
-      `}</style>
+    <div className="w-screen h-screen relative bg-[#0a0a0a]">
+      <style>{`@keyframes edgeFlow { to { stroke-dashoffset: -36; } }`}</style>
 
-      {/* Top toolbar — n8n style */}
-      <div style={{
-        position: 'absolute', top: 16, left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', gap: 8, zIndex: 10, alignItems: 'center',
-      }}>
-        <button style={{
-          background: 'var(--accent)', color: '#0b0d0f', border: 'none',
-          padding: '8px 20px', borderRadius: 20, fontSize: 13, fontWeight: 600,
-          cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-        }}>Active</button>
-        <button style={{
-          background: 'var(--surface)', color: 'var(--text-bright)', border: '1px solid var(--border)',
-          padding: '8px 20px', borderRadius: 20, fontSize: 13, fontWeight: 500,
-          cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-        }}>Share</button>
-        <button style={{
-          background: 'var(--surface)', color: 'var(--accent)', border: '1px solid var(--border)',
-          padding: '8px 20px', borderRadius: 20, fontSize: 13, fontWeight: 500,
-          cursor: 'pointer', fontFamily: 'Inter, sans-serif',
-        }}>Save</button>
-        {['↻', '•••'].map((icon, i) => (
-          <button key={i} style={{
-            background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)',
-            width: 36, height: 36, borderRadius: 10, fontSize: 14,
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>{icon}</button>
+      {/* Animated background beams */}
+      <BackgroundBeams />
+
+      {/* Top toolbar */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 items-center">
+        <button className="bg-emerald-400 text-[#0a0a0a] px-5 py-2 rounded-full text-[13px] font-semibold hover:bg-emerald-300 transition-colors">
+          Active
+        </button>
+        <button className="bg-[#161a1e] text-zinc-300 border border-white/[0.06] px-5 py-2 rounded-full text-[13px] font-medium hover:border-white/[0.12] transition-colors">
+          Share
+        </button>
+        <button className="bg-[#161a1e] text-emerald-400 border border-white/[0.06] px-5 py-2 rounded-full text-[13px] font-medium hover:border-emerald-400/20 transition-colors">
+          Save
+        </button>
+        {['↻', '⋯'].map((icon, i) => (
+          <button key={i} className="bg-[#161a1e] text-zinc-400 border border-white/[0.06] w-9 h-9 rounded-lg text-sm flex items-center justify-center hover:border-white/[0.12] transition-colors">
+            {icon}
+          </button>
         ))}
       </div>
 
-      {/* Bottom bar — status */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        height: 48, background: 'var(--surface)',
-        borderTop: '1px solid var(--border)',
-        display: 'flex', alignItems: 'center', padding: '0 20px',
-        gap: 16, zIndex: 10,
-      }}>
-        <span style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>
+      {/* Bottom bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-12 bg-[#111417] border-t border-white/[0.06] flex items-center px-5 gap-4 z-10">
+        <span className="text-xs text-emerald-400 font-semibold">
           {new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
         </span>
-        <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>
-          Latest logs from AlgerON
-        </span>
-        <div style={{ flex: 1 }} />
-        <div style={{
-          height: 24, width: 200,
-          background: 'linear-gradient(90deg, #166534 0%, #4ade80 100%)',
-          borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
-          padding: '0 8px',
-        }}>
-          <span style={{ fontSize: 10, color: '#0b0d0f', fontWeight: 600 }}>
-            Online
-          </span>
+        <span className="text-xs text-zinc-600">Latest logs from AlgerON</span>
+        <div className="flex-1" />
+        <div className="h-6 w-48 bg-gradient-to-r from-emerald-900 to-emerald-400 rounded-md flex items-center justify-end px-2">
+          <span className="text-[10px] text-[#0a0a0a] font-semibold">Online</span>
         </div>
       </div>
 
