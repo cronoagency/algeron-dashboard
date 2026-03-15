@@ -1,121 +1,192 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useCallback, useEffect, useState } from 'react';
+import {
+  ReactFlow,
+  useNodesState,
+  useEdgesState,
+  ConnectionLineType,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+
+import OrbNode from './components/OrbNode';
+import SystemNode from './components/SystemNode';
+import AnimatedEdge from './components/AnimatedEdge';
+
+const nodeTypes = {
+  orb: OrbNode,
+  system: SystemNode,
+};
+
+const edgeTypes = {
+  animated: AnimatedEdge,
+};
+
+// Initial node layout — orb center, systems around
+const initialNodes = [
+  {
+    id: 'orb',
+    type: 'orb',
+    position: { x: 400, y: 280 },
+    data: { status: 'online', color: [90, 154, 130] },
+    draggable: false,
+  },
+  {
+    id: 'terminal',
+    type: 'system',
+    position: { x: 100, y: 80 },
+    data: {
+      label: 'TERMINALE',
+      icon: '⌨',
+      preview: 'Chat diretta',
+      online: true,
+    },
+  },
+  {
+    id: 'trade',
+    type: 'system',
+    position: { x: 650, y: 60 },
+    data: {
+      label: 'TRADE',
+      icon: '📊',
+      preview: '7 posizioni attive',
+      online: true,
+    },
+  },
+  {
+    id: 'memoria',
+    type: 'system',
+    position: { x: 720, y: 300 },
+    data: {
+      label: 'MEMORIA',
+      icon: '🧠',
+      preview: '4443 embeddings',
+      online: true,
+    },
+  },
+  {
+    id: 'sistemi',
+    type: 'system',
+    position: { x: 80, y: 350 },
+    data: {
+      label: 'SISTEMI',
+      icon: '⚡',
+      preview: 'Pi + Mac + Display',
+      online: true,
+    },
+  },
+  {
+    id: 'agenzia',
+    type: 'system',
+    position: { x: 650, y: 520 },
+    data: {
+      label: 'AGENZIA',
+      icon: '🏢',
+      preview: 'Staes · Homefloo',
+      online: true,
+    },
+  },
+  {
+    id: 'blog',
+    type: 'system',
+    position: { x: 100, y: 550 },
+    data: {
+      label: 'BLOG',
+      icon: '✍',
+      preview: '11 post · algeron.ai',
+      online: true,
+    },
+  },
+  {
+    id: 'display',
+    type: 'system',
+    position: { x: 380, y: 550 },
+    data: {
+      label: 'DISPLAY',
+      icon: '📱',
+      preview: 'Touch-to-talk',
+      online: true,
+    },
+  },
+];
+
+const initialEdges = [
+  { id: 'orb-terminal', source: 'orb', target: 'terminal', sourceHandle: 'left', targetHandle: 'bottom', type: 'animated', data: { active: false } },
+  { id: 'orb-trade', source: 'orb', target: 'trade', sourceHandle: 'right', targetHandle: 'bottom', type: 'animated', data: { active: false } },
+  { id: 'orb-memoria', source: 'orb', target: 'memoria', sourceHandle: 'right', targetHandle: 'left', type: 'animated', data: { active: false } },
+  { id: 'orb-sistemi', source: 'orb', target: 'sistemi', sourceHandle: 'left', targetHandle: 'right', type: 'animated', data: { active: false } },
+  { id: 'orb-agenzia', source: 'orb', target: 'agenzia', sourceHandle: 'bottom', targetHandle: 'top', type: 'animated', data: { active: false } },
+  { id: 'orb-blog', source: 'orb', target: 'blog', sourceHandle: 'bottom', targetHandle: 'top', type: 'animated', data: { active: false } },
+  { id: 'orb-display', source: 'orb', target: 'display', sourceHandle: 'bottom', targetHandle: 'top', type: 'animated', data: { active: false } },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  // Randomly pulse synapses to simulate activity
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setEdges(eds => {
+        const idx = Math.floor(Math.random() * eds.length);
+        return eds.map((e, i) => ({
+          ...e,
+          data: { ...e.data, active: i === idx },
+        }));
+      });
+    }, 2000);
+
+    // Clear active after pulse
+    const clearInterval2 = setInterval(() => {
+      setEdges(eds => eds.map(e => ({
+        ...e,
+        data: { ...e.data, active: false },
+      })));
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(clearInterval2);
+    };
+  }, [setEdges]);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ width: '100vw', height: '100vh' }}>
+      {/* SVG filter for glow effect */}
+      <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
 
-      <div className="ticks"></div>
+      {/* Animated dash keyframes */}
+      <style>{`
+        @keyframes dashFlow {
+          to { stroke-dashoffset: -36; }
+        }
+      `}</style>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        connectionLineType={ConnectionLineType.Bezier}
+        fitView
+        fitViewOptions={{ padding: 0.3 }}
+        proOptions={{ hideAttribution: true }}
+        minZoom={0.5}
+        maxZoom={1.5}
+        defaultEdgeOptions={{ type: 'animated' }}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
