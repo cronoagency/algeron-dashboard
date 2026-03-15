@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
-const API_URL = "https://api.algeron.ai";
-const API_KEY = "nU3PeuXXwkYVfhBg-OuQiVF-lixycblk1G3vZ_ZKG6c";
+const API_URL = import.meta.env.VITE_API_URL || "https://api.algeron.ai";
+const API_KEY = import.meta.env.VITE_API_KEY || "";
 
 export function Terminal() {
   const [messages, setMessages] = useState([]);
