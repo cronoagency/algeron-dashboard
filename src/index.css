@@ -1,19 +1,15 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-:root {
-  --bg: #0a0a0a;
-  --accent: #4ade80;
-}
-
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: #0a0a0a;
-  overflow: hidden;
+  color: #d4d4d8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* React Flow overrides */
-.react-flow__background { display: none !important; }
-.react-flow__attribution { display: none !important; }
-.react-flow__controls { display: none !important; }
-.react-flow__minimap { display: none !important; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #27272a; border-radius: 2px; }
