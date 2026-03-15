@@ -75,60 +75,30 @@ export default function App() {
             transition={{ type: "spring", stiffness: 200, damping: 25 }}
           >
             <CometCard>
-              <div
-                className="w-96 rounded-[20px] bg-[#1a1a1a]/90 backdrop-blur-xl p-6 cursor-pointer"
-                onClick={() => setActiveSection(null)}
-              >
+              <div className="w-96 rounded-[20px] bg-[#1a1a1a]/90 backdrop-blur-xl p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-[11px] font-medium tracking-widest text-zinc-500 uppercase">
                     {activeSection.label}
                   </span>
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                    <span className="text-white text-xs">↗</span>
-                  </div>
+                  <button
+                    onClick={() => setActiveSection(null)}
+                    className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                  >
+                    <span className="text-zinc-400 text-sm">✕</span>
+                  </button>
                 </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-semibold text-white mb-6">
-                  {activeSection.label} Overview
-                </h3>
 
                 {/* Content area */}
                 {activeSection.label === "Terminale" ? (
-                  <div className="h-80 mb-5">
+                  <div className="h-96">
                     <Terminal />
                   </div>
                 ) : (
-                  <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-5 flex items-center justify-center">
+                  <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
                     <span className="text-zinc-600 text-sm">Dati in arrivo</span>
                   </div>
                 )}
-
-                {/* Status indicators */}
-                <div className="flex gap-6">
-                  <div>
-                    <span className="text-[11px] text-zinc-500 block">Status</span>
-                    <span className="text-sm text-white flex items-center gap-1.5 mt-0.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
-                      Online
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[11px] text-zinc-500 block">Latency</span>
-                    <span className="text-sm text-white flex items-center gap-1.5 mt-0.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
-                      Low
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[11px] text-zinc-500 block">Load</span>
-                    <span className="text-sm text-white flex items-center gap-1.5 mt-0.5">
-                      <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-                      Medium
-                    </span>
-                  </div>
-                </div>
               </div>
             </CometCard>
           </motion.div>
