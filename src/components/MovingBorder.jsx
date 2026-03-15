@@ -23,7 +23,7 @@ export function MovingBorderCard({
         </MovingBorder>
       </div>
       <div
-        className={cn("relative flex h-full w-full flex-col items-center justify-center border border-white/[0.08] bg-[#0f1115]/90 backdrop-blur-xl", className)}
+        className={cn("relative flex h-full w-full flex-col items-center justify-center border border-white/[0.1] bg-white/[0.04] backdrop-blur-2xl", className)}
         style={{ borderRadius: `calc(${borderRadius} * 0.96)` }}
       >
         {children}

@@ -28,8 +28,9 @@ export function HoverEffect({ items, className }) {
           </AnimatePresence>
           <div className={cn(
             "rounded-xl h-full w-full p-4 overflow-hidden",
-            "bg-[#111318] border border-white/[0.05]",
-            "group-hover:border-emerald-500/[0.2] transition-colors duration-300",
+            "bg-white/[0.03] backdrop-blur-xl border border-white/[0.08]",
+            "group-hover:border-emerald-500/[0.25] group-hover:bg-white/[0.05]",
+            "transition-all duration-300 shadow-xl shadow-black/20",
             "relative z-20"
           )}>
             <div className="relative z-50">
@@ -37,7 +38,7 @@ export function HoverEffect({ items, className }) {
               <div className="flex items-center justify-between mb-3">
                 <div className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center text-lg",
-                  "bg-[#1a1d24] border border-white/[0.06]"
+                  "bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm"
                 )}>
                   {item.icon}
                 </div>

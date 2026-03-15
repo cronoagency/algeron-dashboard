@@ -17,15 +17,24 @@ const nodes = [
 
 function App() {
   return (
-    <div className="relative min-h-screen w-full bg-[#0a0a0a] overflow-hidden flex flex-col items-center">
-      {/* Background */}
+    <div className="relative min-h-screen w-full overflow-hidden flex flex-col items-center"
+      style={{
+        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(16, 80, 50, 0.25) 0%, rgba(10, 10, 10, 1) 70%)",
+      }}
+    >
+      {/* Secondary glow — bottom right */}
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(74, 222, 128, 0.04) 0%, transparent 70%)" }}
+      />
+
+      {/* Background beams */}
       <BackgroundBeams />
 
       {/* Dot pattern */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.015) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px)",
           backgroundSize: "20px 20px",
         }}
       />
