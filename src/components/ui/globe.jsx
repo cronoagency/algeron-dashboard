@@ -61,7 +61,21 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
         <Html transform center sprite distanceFactor={10}
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
           <span
-            style={{ fontSize: '3px', color: hovered ? '#fff' : '#4ade80', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+            style={{
+              fontSize: '3px',
+              color: hovered ? '#fff' : 'rgba(255,255,255,0.7)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+              background: 'rgba(255,255,255,0.06)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              padding: '1px 3px',
+              borderRadius: '1.5px',
+              border: '0.3px solid rgba(255,255,255,0.08)',
+              letterSpacing: '0.02em',
+            }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
             {marker.label}
           </span>
