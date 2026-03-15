@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Globe3D } from "./components/ui/globe";
 import { CometCard } from "./components/ui/comet-card";
+import { Terminal } from "./components/Terminal";
 
 // 8 sezioni sulla calotta superiore del globo
 const markers = [
@@ -93,10 +94,16 @@ export default function App() {
                   {activeSection.label} Overview
                 </h3>
 
-                {/* Placeholder content area */}
-                <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-5 flex items-center justify-center">
-                  <span className="text-zinc-600 text-sm">Dati in arrivo</span>
-                </div>
+                {/* Content area */}
+                {activeSection.label === "Terminale" ? (
+                  <div className="h-80 mb-5">
+                    <Terminal />
+                  </div>
+                ) : (
+                  <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-5 flex items-center justify-center">
+                    <span className="text-zinc-600 text-sm">Dati in arrivo</span>
+                  </div>
+                )}
 
                 {/* Status indicators */}
                 <div className="flex gap-6">
