@@ -17,6 +17,7 @@ const markers = [
 
 export default function App() {
   const [activeSection, setActiveSection] = useState(null);
+  const [hoveredSection, setHoveredSection] = useState(null);
 
   return (
     <div className="w-screen h-screen bg-black overflow-hidden">
@@ -38,9 +39,28 @@ export default function App() {
             globeOffset: 4,
           }}
           onMarkerClick={(marker) => setActiveSection(activeSection?.label === marker.label ? null : marker)}
-          onMarkerHover={(marker) => {}}
+          onMarkerHover={(marker) => setHoveredSection(marker)}
         />
       </motion.div>
+
+      {/* Tooltip — appare on hover */}
+      <AnimatePresence>
+        {hoveredSection && !activeSection && (
+          <motion.div
+            key={"tooltip-" + hoveredSection.label}
+            className="absolute top-6 left-1/2 z-20"
+            initial={{ opacity: 0, y: 10, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 10, x: "-50%" }}
+            transition={{ duration: 0.15 }}
+          >
+            <div className="rounded-xl bg-[#1a1a1a]/90 backdrop-blur-xl px-5 py-3 border border-white/[0.06]">
+              <span className="text-[11px] text-zinc-500 uppercase tracking-widest">{hoveredSection.label}</span>
+              <p className="text-sm text-white mt-1">Anteprima dati</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Comet Card — appare on click */}
       <AnimatePresence>
