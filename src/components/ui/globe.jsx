@@ -165,7 +165,8 @@ function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
       </group>
       {config.showAtmosphere && <Atmosphere radius={config.radius} color={config.atmosphereColor || "#4da6ff"} intensity={config.atmosphereIntensity || 0.5} blur={config.atmosphereBlur || 2} />}
       <OrbitControls makeDefault enablePan={false} enableZoom={false} rotateSpeed={0.4}
-        autoRotate={config.autoRotateSpeed > 0} autoRotateSpeed={config.autoRotateSpeed || 0.3} enableDamping dampingFactor={0.1} />
+        autoRotate={config.autoRotateSpeed > 0} autoRotateSpeed={config.autoRotateSpeed || 0.3} enableDamping dampingFactor={0.1}
+        minPolarAngle={Math.PI * 0.2} maxPolarAngle={Math.PI * 0.55} />
     </>
   );
 }
