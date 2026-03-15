@@ -10,13 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-hover-card": "^1.1.15",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "@tabler/icons-react": "^3.40.0",
     "@xyflow/react": "^12.10.1",
+    "aceternity-ui": "^0.2.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.36.0",
     "motion": "^12.36.0",
     "mqtt": "^5.15.0",
+    "qss": "^3.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwind-merge": "^3.5.0",
