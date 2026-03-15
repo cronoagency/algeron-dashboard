@@ -60,16 +60,11 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
       <group ref={imageGroupRef} position={topPosition}>
         <Html transform center sprite distanceFactor={10}
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
-          <div
-            className={cn(
-              "cursor-pointer rounded-lg px-2.5 py-1 text-[10px] font-medium tracking-wide transition-all duration-200 whitespace-nowrap",
-              hovered
-                ? "bg-emerald-400 text-black scale-110 shadow-lg shadow-emerald-400/30"
-                : "bg-neutral-900/80 text-emerald-400/90 border border-emerald-400/20 backdrop-blur-sm"
-            )}
+          <span
+            style={{ fontSize: '3px', color: hovered ? '#fff' : '#4ade80', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
             {marker.label}
-          </div>
+          </span>
         </Html>
       </group>
     </group>
