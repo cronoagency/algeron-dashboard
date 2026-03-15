@@ -1,15 +1,15 @@
 import { Globe3D } from "./components/ui/globe";
 
-// 8 sezioni distribuite uniformemente sulla sfera
+// 8 sezioni sulla calotta superiore del globo
 const markers = [
-  { lat: 45, lng: 0, label: "Trade" },
-  { lat: 45, lng: 90, label: "Terminale" },
-  { lat: 45, lng: 180, label: "Memoria" },
-  { lat: 45, lng: -90, label: "Sistemi" },
-  { lat: 0, lng: 45, label: "Agenzia" },
-  { lat: 0, lng: 135, label: "Blog" },
-  { lat: 0, lng: -135, label: "Display" },
-  { lat: 0, lng: -45, label: "File" },
+  { lat: 70, lng: 0, label: "Trade" },
+  { lat: 70, lng: 90, label: "Terminale" },
+  { lat: 70, lng: 180, label: "Memoria" },
+  { lat: 70, lng: -90, label: "Sistemi" },
+  { lat: 45, lng: 45, label: "Agenzia" },
+  { lat: 45, lng: 135, label: "Blog" },
+  { lat: 45, lng: -135, label: "Display" },
+  { lat: 45, lng: -45, label: "File" },
 ];
 
 export default function App() {

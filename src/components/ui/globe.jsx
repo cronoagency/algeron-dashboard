@@ -62,7 +62,7 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
           <span
             style={{
-              fontSize: '3px',
+              fontSize: '4px',
               color: hovered ? '#fff' : 'rgba(255,255,255,0.7)',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
