@@ -18,21 +18,21 @@ const sampleMarkers = [
 
 export default function App() {
   return (
-    <div className="relative w-screen h-screen bg-black overflow-hidden">
-      <div className="absolute -bottom-[40%] left-1/2 -translate-x-1/2 w-[150vw] h-[150vh]">
-        <Globe3D
-          className="h-full w-full"
-          markers={sampleMarkers}
-          config={{
-            atmosphereColor: "#4da6ff",
-            atmosphereIntensity: 20,
-            bumpScale: 5,
-            autoRotateSpeed: 0.3,
-          }}
-          onMarkerClick={(marker) => console.log("Clicked:", marker.label)}
-          onMarkerHover={(marker) => marker && console.log("Hovering:", marker.label)}
-        />
-      </div>
+    <div className="w-screen h-screen bg-black">
+      <Globe3D
+        className="h-full w-full"
+        markers={sampleMarkers}
+        config={{
+          radius: 3,
+          atmosphereColor: "#4da6ff",
+          atmosphereIntensity: 20,
+          bumpScale: 5,
+          autoRotateSpeed: 0.3,
+          cameraOffset: { x: 0, y: -2.5, z: 0 },
+        }}
+        onMarkerClick={(marker) => console.log("Clicked:", marker.label)}
+        onMarkerHover={(marker) => marker && console.log("Hovering:", marker.label)}
+      />
     </div>
   );
 }

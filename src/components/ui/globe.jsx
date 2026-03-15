@@ -137,7 +137,11 @@ function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover }) {
 
 function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
   const { camera } = useThree();
-  React.useEffect(() => { camera.position.set(0, 0, config.radius * 3.5); camera.lookAt(0, 0, 0); }, [camera, config.radius]);
+  React.useEffect(() => {
+    const offset = config.cameraOffset || { x: 0, y: 0, z: 0 };
+    camera.position.set(offset.x, offset.y + config.radius * 1.5, config.radius * 3);
+    camera.lookAt(0, offset.y, 0);
+  }, [camera, config.radius, config.cameraOffset]);
   return (
     <>
       <ambientLight intensity={config.ambientIntensity || 0.6} />
