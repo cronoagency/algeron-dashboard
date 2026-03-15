@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import mqtt from "mqtt";
+import * as mqtt from "mqtt/dist/mqtt.min";
 
 const MQTT_URL = "ws://192.168.1.219:9001";
 const INPUT_TOPIC = "algeron/terminal/input";
@@ -14,29 +14,39 @@ export function Terminal() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    const client = mqtt.connect(MQTT_URL, { clientId: "dashboard-terminal-" + Date.now() });
-    clientRef.current = client;
+    let client;
+    try {
+      client = mqtt.connect(MQTT_URL, {
+        clientId: "dashboard-terminal-" + Date.now(),
+        connectTimeout: 5000,
+        reconnectPeriod: 5000,
+      });
+      clientRef.current = client;
 
-    client.on("connect", () => {
-      setConnected(true);
-      client.subscribe(OUTPUT_TOPIC);
-    });
+      client.on("connect", () => {
+        setConnected(true);
+        client.subscribe(OUTPUT_TOPIC);
+      });
 
-    client.on("message", (topic, payload) => {
-      try {
-        const data = JSON.parse(payload.toString());
-        if (data.type === "thinking") {
-          setThinking(true);
-        } else if (data.type === "response" || data.type === "error") {
-          setThinking(false);
-          setMessages(prev => [...prev, { role: "assistant", text: data.text }]);
-        }
-      } catch (e) {}
-    });
+      client.on("message", (topic, payload) => {
+        try {
+          const data = JSON.parse(payload.toString());
+          if (data.type === "thinking") {
+            setThinking(true);
+          } else if (data.type === "response" || data.type === "error") {
+            setThinking(false);
+            setMessages(prev => [...prev, { role: "assistant", text: data.text }]);
+          }
+        } catch (e) {}
+      });
 
-    client.on("close", () => setConnected(false));
+      client.on("close", () => setConnected(false));
+      client.on("error", () => setConnected(false));
+    } catch (e) {
+      console.error("MQTT connection error:", e);
+    }
 
-    return () => client.end();
+    return () => { if (client) client.end(); };
   }, []);
 
   useEffect(() => {
