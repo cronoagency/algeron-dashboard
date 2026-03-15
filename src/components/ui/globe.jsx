@@ -138,10 +138,10 @@ function RotatingGlobe({ config, markers, onMarkerClick, onMarkerHover }) {
 function Scene({ markers, config, onMarkerClick, onMarkerHover }) {
   const { camera } = useThree();
   React.useEffect(() => {
-    const offset = config.cameraOffset || { x: 0, y: 0, z: 0 };
-    camera.position.set(offset.x, offset.y + config.radius * 1.5, config.radius * 3);
-    camera.lookAt(0, offset.y, 0);
-  }, [camera, config.radius, config.cameraOffset]);
+    // Camera guarda il globo dall'alto — il globo è spostato in basso
+    camera.position.set(0, config.radius * 2, config.radius * 4);
+    camera.lookAt(0, -config.radius * 1.5, 0);
+  }, [camera, config.radius]);
   return (
     <>
       <ambientLight intensity={config.ambientIntensity || 0.6} />
