@@ -54,17 +54,21 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
         <meshBasicMaterial color={hovered ? "#ffffff" : "#94a3b8"} transparent opacity={hovered ? 0.9 : 0.6} />
       </mesh>
       <mesh position={surfacePosition} quaternion={lineQuaternion}>
-        <coneGeometry args={[0.015, 0.04, 8]} />
-        <meshBasicMaterial color={hovered ? "#f97316" : "#ef4444"} />
+        <coneGeometry args={[0.012, 0.03, 8]} />
+        <meshBasicMaterial color={hovered ? "#4ade80" : "#4ade80"} transparent opacity={hovered ? 1 : 0.6} />
       </mesh>
       <group ref={imageGroupRef} position={topPosition}>
         <Html transform center sprite distanceFactor={10}
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
-          <div className={cn("cursor-pointer overflow-hidden rounded-full bg-neutral-900 shadow-lg transition-transform duration-200",
-              hovered && "scale-125 shadow-xl ring-1 ring-white/50")}
-            style={{ width: "8px", height: "8px" }}
+          <div
+            className={cn(
+              "cursor-pointer rounded-lg px-2.5 py-1 text-[10px] font-medium tracking-wide transition-all duration-200 whitespace-nowrap",
+              hovered
+                ? "bg-emerald-400 text-black scale-110 shadow-lg shadow-emerald-400/30"
+                : "bg-neutral-900/80 text-emerald-400/90 border border-emerald-400/20 backdrop-blur-sm"
+            )}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            <img src={marker.src} alt={marker.label || "Marker"} className="h-full w-full object-cover" draggable={false} />
+            {marker.label}
           </div>
         </Html>
       </group>
