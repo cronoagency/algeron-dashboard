@@ -1,25 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #0a0a0f;
-  --bg-dot: rgba(255, 255, 255, 0.03);
-  --surface: rgba(15, 20, 28, 0.85);
-  --surface-hover: rgba(20, 28, 38, 0.9);
-  --border: rgba(90, 154, 130, 0.12);
-  --border-glow: rgba(90, 154, 130, 0.35);
-  --accent: #5a9a82;
-  --accent-bright: #7dffc0;
-  --accent-dim: #2d5a45;
-  --text: #d0d0d0;
-  --text-dim: #5a6a7a;
-  --text-bright: #f0f0f0;
-  --synapse: rgba(90, 154, 130, 0.4);
-  --synapse-active: rgba(125, 255, 192, 0.8);
-  --node-bg: rgba(12, 16, 22, 0.9);
-  --red: #ff4455;
-  --green: #44ff88;
-  --orange: #ffaa33;
-  --blue: #4488ff;
+  --bg: #0b0d0f;
+  --surface: #161a1e;
+  --surface-2: #1c2127;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-node: rgba(74, 222, 128, 0.15);
+  --border-node-hover: rgba(74, 222, 128, 0.3);
+  --accent: #4ade80;
+  --accent-dim: rgba(74, 222, 128, 0.15);
+  --accent-glow: rgba(74, 222, 128, 0.4);
+  --text: #a1a1aa;
+  --text-dim: #52525b;
+  --text-bright: #e4e4e7;
+  --text-white: #fafafa;
+  --node-bg: linear-gradient(180deg, #1a1f24 0%, #13171b 100%);
+  --node-border: #2a2f35;
+  --panel-bg: rgba(22, 26, 30, 0.95);
+  --green-gradient: linear-gradient(90deg, #166534 0%, #4ade80 50%, #166534 100%);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,30 +25,24 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Inter', -apple-system, sans-serif;
   overflow: hidden;
   height: 100vh;
   width: 100vw;
-  /* Subtle dot pattern */
-  background-image: radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-#root { height: 100vh; width: 100vw; }
-
-h1, h2, h3, .header-font {
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 0.05em;
-}
+#root { height: 100vh; width: 100vw; position: relative; }
 
 /* React Flow overrides */
 .react-flow__background { display: none !important; }
 .react-flow__attribution { display: none !important; }
-.react-flow__edge-path { stroke: var(--synapse) !important; stroke-width: 2 !important; }
 .react-flow__controls { display: none !important; }
 .react-flow__minimap { display: none !important; }
+.react-flow__pane { cursor: default !important; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #2a2f35; border-radius: 2px; }

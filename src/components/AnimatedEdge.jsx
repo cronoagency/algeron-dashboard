@@ -2,12 +2,11 @@ import { memo } from 'react';
 import { getBezierPath } from '@xyflow/react';
 
 /**
- * AnimatedEdge — synapse connection between nodes.
- * Glowing green line with animated flow particles.
+ * AnimatedEdge — n8n-style green connection with glow and animated flow.
  */
 function AnimatedEdge({
   id, sourceX, sourceY, targetX, targetY,
-  sourcePosition, targetPosition, data, style,
+  sourcePosition, targetPosition, data,
 }) {
   const [edgePath] = getBezierPath({
     sourceX, sourceY, sourcePosition,
@@ -18,40 +17,61 @@ function AnimatedEdge({
 
   return (
     <>
-      {/* Glow layer — soft spread */}
+      {/* Wide glow */}
       <path
         d={edgePath}
         fill="none"
-        stroke={isActive ? 'var(--synapse-active)' : 'var(--synapse)'}
-        strokeWidth={isActive ? 6 : 3}
-        strokeOpacity={isActive ? 0.15 : 0.06}
+        stroke="rgba(74, 222, 128, 0.08)"
+        strokeWidth={8}
         strokeLinecap="round"
-        style={{ transition: 'all 0.6s ease' }}
       />
       {/* Main line */}
       <path
         d={edgePath}
         fill="none"
-        stroke={isActive ? 'var(--accent-bright)' : 'var(--accent)'}
-        strokeWidth={isActive ? 1.5 : 0.8}
-        strokeOpacity={isActive ? 0.9 : 0.3}
+        stroke={isActive ? 'rgba(74, 222, 128, 0.7)' : 'rgba(74, 222, 128, 0.25)'}
+        strokeWidth={isActive ? 2 : 1.5}
         strokeLinecap="round"
-        style={{ transition: 'all 0.6s ease' }}
+        style={{ transition: 'all 0.5s ease' }}
       />
-      {/* Animated pulse when active */}
+      {/* Animated flow particles */}
       {isActive && (
         <path
           d={edgePath}
           fill="none"
-          stroke="var(--accent-bright)"
-          strokeWidth={1.5}
-          strokeDasharray="4 16"
-          strokeOpacity={0.8}
+          stroke="rgba(74, 222, 128, 0.9)"
+          strokeWidth={2}
+          strokeDasharray="3 15"
           strokeLinecap="round"
-          style={{
-            animation: 'dashFlow 2s linear infinite',
-          }}
+          style={{ animation: 'edgeFlow 2s linear infinite' }}
         />
+      )}
+      {/* Connection dot at source */}
+      <circle
+        cx={sourceX}
+        cy={sourceY}
+        r={3}
+        fill="rgba(74, 222, 128, 0.5)"
+      />
+      {/* Connection dot at target */}
+      <circle
+        cx={targetX}
+        cy={targetY}
+        r={3}
+        fill="rgba(74, 222, 128, 0.5)"
+      />
+      {/* Edge label */}
+      {data?.label && (
+        <text
+          x={(sourceX + targetX) / 2}
+          y={(sourceY + targetY) / 2 - 8}
+          textAnchor="middle"
+          fill="#52525b"
+          fontSize={10}
+          fontFamily="Inter, sans-serif"
+        >
+          {data.label}
+        </text>
       )}
     </>
   );

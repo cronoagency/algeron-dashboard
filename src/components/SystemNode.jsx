@@ -2,33 +2,32 @@ import { memo, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 
 /**
- * SystemNode — a glass card node representing a system component.
- * Shows icon + title + mini preview. Expandable on click.
+ * SystemNode — n8n-style dark card with icon, title, green check, border glow.
  */
 function SystemNode({ data }) {
-  const [expanded, setExpanded] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
-  const isOnline = data.online !== false;
+  const isActive = data.active !== false;
 
   return (
     <div
-      onClick={() => setExpanded(!expanded)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
-        background: 'linear-gradient(135deg, rgba(15, 22, 30, 0.95) 0%, rgba(10, 15, 20, 0.98) 100%)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        border: `1px solid ${isOnline ? 'rgba(90, 154, 130, 0.2)' : 'rgba(255,68,85,0.2)'}`,
-        borderRadius: 14,
-        padding: expanded ? '18px 22px' : '14px 18px',
-        minWidth: expanded ? 260 : 155,
-        maxWidth: expanded ? 340 : 200,
+        background: 'var(--node-bg)',
+        border: `1px solid ${hovered ? 'var(--border-node-hover)' : 'var(--border-node)'}`,
+        borderRadius: 10,
+        padding: '16px',
+        width: 170,
         cursor: 'pointer',
-        transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-        boxShadow: isOnline
-          ? '0 4px 24px rgba(0, 0, 0, 0.4), 0 0 40px rgba(90, 154, 130, 0.06), inset 0 1px 0 rgba(255,255,255,0.03)'
-          : '0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 68, 85, 0.06)',
+        transition: 'all 0.25s ease',
+        boxShadow: hovered
+          ? '0 0 30px rgba(74, 222, 128, 0.08), 0 8px 32px rgba(0,0,0,0.5)'
+          : '0 4px 20px rgba(0, 0, 0, 0.4)',
+        position: 'relative',
       }}
     >
+      {/* Connection handles — invisible */}
       <Handle type="target" position={Position.Top} id="top" style={{ opacity: 0 }} />
       <Handle type="target" position={Position.Right} id="right" style={{ opacity: 0 }} />
       <Handle type="target" position={Position.Bottom} id="bottom" style={{ opacity: 0 }} />
@@ -38,55 +37,76 @@ function SystemNode({ data }) {
       <Handle type="source" position={Position.Bottom} id="s-bottom" style={{ opacity: 0 }} />
       <Handle type="source" position={Position.Left} id="s-left" style={{ opacity: 0 }} />
 
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 20 }}>{data.icon || '●'}</span>
-        <div>
-          <div style={{
-            fontSize: 12,
-            fontWeight: 600,
-            color: 'var(--text-bright)',
-            fontFamily: "'Orbitron', sans-serif",
-            letterSpacing: '0.05em',
-          }}>
-            {data.label}
-          </div>
-          <div style={{
-            fontSize: 10,
-            color: isOnline ? 'var(--accent)' : 'var(--red)',
-            marginTop: 2,
-          }}>
-            {isOnline ? '● online' : '● offline'}
-          </div>
+      {/* Green checkmark */}
+      {isActive && (
+        <div style={{
+          position: 'absolute',
+          top: 10,
+          right: 10,
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          background: 'var(--accent)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2.5 6L5 8.5L9.5 3.5" stroke="#0b0d0f" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
+      )}
+
+      {/* Icon */}
+      <div style={{
+        width: 44,
+        height: 44,
+        borderRadius: 10,
+        background: 'var(--surface-2)',
+        border: '1px solid var(--border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: '0 auto 12px',
+        fontSize: 22,
+      }}>
+        {data.icon}
       </div>
 
-      {/* Preview — always visible */}
-      {data.preview && (
+      {/* Title */}
+      <div style={{
+        fontSize: 13,
+        fontWeight: 500,
+        color: 'var(--text-white)',
+        textAlign: 'center',
+        lineHeight: 1.3,
+      }}>
+        {data.label}
+      </div>
+
+      {/* Subtitle */}
+      {data.subtitle && (
         <div style={{
-          fontSize: 10,
+          fontSize: 11,
           color: 'var(--text-dim)',
-          marginTop: 8,
-          lineHeight: 1.4,
+          textAlign: 'center',
+          marginTop: 4,
         }}>
-          {data.preview}
+          {data.subtitle}
         </div>
       )}
 
-      {/* Expanded content */}
-      {expanded && data.detail && (
-        <div style={{
-          fontSize: 11,
-          color: 'var(--text)',
-          marginTop: 12,
-          paddingTop: 10,
-          borderTop: '1px solid var(--border)',
-          lineHeight: 1.5,
-          whiteSpace: 'pre-wrap',
+      {/* Connection labels — small text below node */}
+      {data.outputs && data.outputs.map((out, i) => (
+        <div key={i} style={{
+          fontSize: 10,
+          color: 'var(--text-dim)',
+          textAlign: 'center',
+          marginTop: i === 0 ? 10 : 2,
         }}>
-          {data.detail}
+          {out}
         </div>
-      )}
+      ))}
     </div>
   );
 }
