@@ -22,7 +22,7 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
   const { camera } = useThree();
 
   const surfacePosition = useMemo(() => latLngToVector3(marker.lat, marker.lng, radius * 1.001), [marker.lat, marker.lng, radius]);
-  const topPosition = useMemo(() => latLngToVector3(marker.lat, marker.lng, radius * 1.18), [marker.lat, marker.lng, radius]);
+  const topPosition = useMemo(() => latLngToVector3(marker.lat, marker.lng, radius * 1.25), [marker.lat, marker.lng, radius]);
   const lineHeight = topPosition.distanceTo(surfacePosition);
 
   useFrame(() => {
@@ -58,11 +58,11 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
         <meshBasicMaterial color={hovered ? "#4ade80" : "#4ade80"} transparent opacity={hovered ? 1 : 0.6} />
       </mesh>
       <group ref={imageGroupRef} position={topPosition}>
-        <Html transform center sprite distanceFactor={10}
+        <Html transform center sprite distanceFactor={5}
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
           <span
             style={{
-              fontSize: '4px',
+              fontSize: '5px',
               color: hovered ? '#fff' : 'rgba(255,255,255,0.7)',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
