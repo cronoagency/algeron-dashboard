@@ -14,19 +14,19 @@ function SystemNode({ data }) {
     <div
       onClick={() => setExpanded(!expanded)}
       style={{
-        background: 'var(--node-bg)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: `1px solid ${isOnline ? 'var(--border-glow)' : 'rgba(255,68,85,0.3)'}`,
-        borderRadius: 12,
-        padding: expanded ? '16px 20px' : '12px 16px',
-        minWidth: expanded ? 240 : 140,
-        maxWidth: expanded ? 320 : 180,
+        background: 'linear-gradient(135deg, rgba(15, 22, 30, 0.95) 0%, rgba(10, 15, 20, 0.98) 100%)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border: `1px solid ${isOnline ? 'rgba(90, 154, 130, 0.2)' : 'rgba(255,68,85,0.2)'}`,
+        borderRadius: 14,
+        padding: expanded ? '18px 22px' : '14px 18px',
+        minWidth: expanded ? 260 : 155,
+        maxWidth: expanded ? 340 : 200,
         cursor: 'pointer',
-        transition: 'all 0.3s ease',
+        transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
         boxShadow: isOnline
-          ? '0 0 20px rgba(90, 154, 130, 0.1), inset 0 0 15px rgba(90, 154, 130, 0.03)'
-          : '0 0 15px rgba(255, 68, 85, 0.1)',
+          ? '0 4px 24px rgba(0, 0, 0, 0.4), 0 0 40px rgba(90, 154, 130, 0.06), inset 0 1px 0 rgba(255,255,255,0.03)'
+          : '0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 68, 85, 0.06)',
       }}
     >
       <Handle type="target" position={Position.Top} id="top" style={{ opacity: 0 }} />

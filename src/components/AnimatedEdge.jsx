@@ -18,36 +18,38 @@ function AnimatedEdge({
 
   return (
     <>
-      {/* Glow layer */}
+      {/* Glow layer — soft spread */}
       <path
         d={edgePath}
         fill="none"
         stroke={isActive ? 'var(--synapse-active)' : 'var(--synapse)'}
-        strokeWidth={isActive ? 3 : 1.5}
-        strokeOpacity={isActive ? 0.6 : 0.3}
-        filter={isActive ? 'url(#glow)' : undefined}
-        style={{ transition: 'all 0.5s ease' }}
+        strokeWidth={isActive ? 6 : 3}
+        strokeOpacity={isActive ? 0.15 : 0.06}
+        strokeLinecap="round"
+        style={{ transition: 'all 0.6s ease' }}
       />
       {/* Main line */}
       <path
         d={edgePath}
         fill="none"
         stroke={isActive ? 'var(--accent-bright)' : 'var(--accent)'}
-        strokeWidth={isActive ? 2 : 1}
-        strokeOpacity={isActive ? 0.8 : 0.4}
-        style={{ transition: 'all 0.5s ease' }}
+        strokeWidth={isActive ? 1.5 : 0.8}
+        strokeOpacity={isActive ? 0.9 : 0.3}
+        strokeLinecap="round"
+        style={{ transition: 'all 0.6s ease' }}
       />
-      {/* Animated dash when active */}
+      {/* Animated pulse when active */}
       {isActive && (
         <path
           d={edgePath}
           fill="none"
           stroke="var(--accent-bright)"
-          strokeWidth={2}
-          strokeDasharray="6 12"
-          strokeOpacity={0.9}
+          strokeWidth={1.5}
+          strokeDasharray="4 16"
+          strokeOpacity={0.8}
+          strokeLinecap="round"
           style={{
-            animation: 'dashFlow 1.5s linear infinite',
+            animation: 'dashFlow 2s linear infinite',
           }}
         />
       )}

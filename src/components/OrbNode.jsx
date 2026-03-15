@@ -25,32 +25,44 @@ function OrbNode({ data }) {
       const cx = size / 2;
       const cy = size / 2;
 
-      // Outer glow
-      const glowSize = 50 + Math.sin(phase * 0.8) * 8;
-      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowSize);
-      glow.addColorStop(0, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.25)`);
-      glow.addColorStop(0.5, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.08)`);
-      glow.addColorStop(1, 'transparent');
-      ctx.fillStyle = glow;
+      // Outermost ambient glow
+      const ambientSize = 70 + Math.sin(phase * 0.5) * 5;
+      const ambient = ctx.createRadialGradient(cx, cy, 0, cx, cy, ambientSize);
+      ambient.addColorStop(0, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.08)`);
+      ambient.addColorStop(0.6, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.02)`);
+      ambient.addColorStop(1, 'transparent');
+      ctx.fillStyle = ambient;
       ctx.fillRect(0, 0, size, size);
 
-      // Core orb
-      const coreSize = 22 + Math.sin(phase) * 3;
+      // Mid glow ring
+      const midSize = 38 + Math.sin(phase * 0.8) * 4;
+      const mid = ctx.createRadialGradient(cx, cy, midSize * 0.3, cx, cy, midSize);
+      mid.addColorStop(0, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.15)`);
+      mid.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.arc(cx, cy, midSize, 0, Math.PI * 2);
+      ctx.fillStyle = mid;
+      ctx.fill();
+
+      // Core orb — tight, bright
+      const coreSize = 16 + Math.sin(phase) * 2;
       const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreSize);
-      core.addColorStop(0, `rgba(${color[0] + 60}, ${color[1] + 60}, ${color[2] + 60}, 1)`);
-      core.addColorStop(0.6, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.8)`);
+      core.addColorStop(0, `rgba(${Math.min(255, color[0] + 100)}, ${Math.min(255, color[1] + 100)}, ${Math.min(255, color[2] + 100)}, 1)`);
+      core.addColorStop(0.4, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.9)`);
       core.addColorStop(1, `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0)`);
       ctx.beginPath();
       ctx.arc(cx, cy, coreSize, 0, Math.PI * 2);
       ctx.fillStyle = core;
       ctx.fill();
 
-      // Inner bright point
-      const innerGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 8);
-      innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+      // White hot center
+      const innerSize = 4 + Math.sin(phase * 1.2) * 1;
+      const innerGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, innerSize);
+      innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+      innerGlow.addColorStop(0.5, 'rgba(255, 255, 255, 0.3)');
       innerGlow.addColorStop(1, 'transparent');
       ctx.beginPath();
-      ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+      ctx.arc(cx, cy, innerSize, 0, Math.PI * 2);
       ctx.fillStyle = innerGlow;
       ctx.fill();
 
