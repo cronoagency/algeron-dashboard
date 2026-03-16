@@ -60,26 +60,59 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
       <group ref={imageGroupRef} position={topPosition}>
         <Html transform center sprite distanceFactor={4}
           style={{ pointerEvents: isVisible ? "auto" : "none", opacity: isVisible ? 1 : 0, transition: "opacity 0.15s ease-out" }}>
-          <span
+          <div
             style={{
-              fontSize: '12px',
-              color: hovered ? '#fff' : 'rgba(255,255,255,0.8)',
+              position: 'relative',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              textAlign: 'left',
-              background: 'rgba(255,255,255,0.08)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              padding: '4px 10px',
-              borderRadius: '4px',
-              border: '0.5px solid rgba(255,255,255,0.12)',
-              letterSpacing: '0.03em',
+              background: hovered ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              padding: '6px 12px 6px 28px',
+              borderRadius: '8px',
+              border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
+              transition: 'all 0.2s ease',
+              boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            {marker.label}
-          </span>
+            {/* Icon — tilted, anchored to left border */}
+            {marker.icon && (
+              <div style={{
+                position: 'absolute',
+                left: '-8px',
+                top: '50%',
+                transform: 'translateY(-50%) rotate(-6deg)',
+                transformOrigin: 'bottom center',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                borderRadius: '6px',
+                border: '0.5px solid rgba(255,255,255,0.15)',
+              }}>
+                {React.createElement(marker.icon, {
+                  size: 14,
+                  weight: 'regular',
+                  color: hovered ? '#4ade80' : 'rgba(255,255,255,0.7)',
+                  style: { transition: 'color 0.2s ease' },
+                })}
+              </div>
+            )}
+            <span style={{
+              fontSize: '11px',
+              fontWeight: 500,
+              color: hovered ? '#fff' : 'rgba(255,255,255,0.8)',
+              letterSpacing: '0.04em',
+              transition: 'color 0.2s ease',
+            }}>
+              {marker.label}
+            </span>
+          </div>
         </Html>
       </group>
     </group>

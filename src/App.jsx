@@ -4,16 +4,27 @@ import { Globe3D } from "./components/ui/globe";
 import { CometCard } from "./components/ui/comet-card";
 import { Terminal } from "./components/Terminal";
 
+import {
+  ChartLineUp,
+  Terminal as TerminalIcon,
+  Brain,
+  Cpu,
+  Briefcase,
+  PenNib,
+  Monitor,
+  FolderOpen,
+} from "@phosphor-icons/react";
+
 // 8 sezioni sulla calotta superiore del globo
 const markers = [
-  { lat: 70, lng: 0, label: "Trade" },
-  { lat: 70, lng: 90, label: "Terminale" },
-  { lat: 70, lng: 180, label: "Memoria" },
-  { lat: 70, lng: -90, label: "Sistemi" },
-  { lat: 45, lng: 45, label: "Agenzia" },
-  { lat: 45, lng: 135, label: "Blog" },
-  { lat: 45, lng: -135, label: "Display" },
-  { lat: 45, lng: -45, label: "File" },
+  { lat: 70, lng: 0, label: "Trade", icon: ChartLineUp },
+  { lat: 70, lng: 90, label: "Terminale", icon: TerminalIcon },
+  { lat: 70, lng: 180, label: "Memoria", icon: Brain },
+  { lat: 70, lng: -90, label: "Sistemi", icon: Cpu },
+  { lat: 45, lng: 45, label: "Agenzia", icon: Briefcase },
+  { lat: 45, lng: 135, label: "Blog", icon: PenNib },
+  { lat: 45, lng: -135, label: "Display", icon: Monitor },
+  { lat: 45, lng: -45, label: "File", icon: FolderOpen },
 ];
 
 export default function App() {
