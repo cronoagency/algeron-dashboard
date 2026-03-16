@@ -77,6 +77,7 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
               transition: 'all 0.2s ease',
               boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
+              overflow: 'hidden',
 
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
@@ -85,8 +86,8 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               <div style={{
                 position: 'absolute',
                 left: '6px',
-                top: '50%',
-                transform: 'translateY(-50%) rotate(-6deg)',
+                bottom: '-10px',
+                transform: 'rotate(-6deg)',
                 width: '38px',
                 height: '38px',
                 display: 'flex',
