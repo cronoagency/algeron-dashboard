@@ -86,7 +86,7 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               <div style={{
                 position: 'absolute',
                 left: '6px',
-                bottom: '-10px',
+                bottom: '-6px',
                 transform: 'rotate(-6deg)',
                 width: '38px',
                 height: '38px',
