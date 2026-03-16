@@ -72,7 +72,7 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               background: hovered ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
-              padding: '10px 14px 10px 32px',
+              padding: '8px 14px 8px 52px',
               borderRadius: '12px',
               border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
               transition: 'all 0.2s ease',
@@ -80,15 +80,15 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
 
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            {/* Icon — rounded container, centered vertically, protruding left */}
+            {/* Icon — rounded container, inside tile, left with padding */}
             {marker.icon && (
               <div style={{
                 position: 'absolute',
-                left: '-20px',
+                left: '6px',
                 top: '50%',
                 transform: 'translateY(-50%) rotate(-6deg)',
-                width: '42px',
-                height: '42px',
+                width: '38px',
+                height: '38px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
