@@ -77,24 +77,27 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
               transition: 'all 0.2s ease',
               boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
-              overflow: 'hidden',
+
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            {/* Icon — centered vertically, left side, rounded container half-clipped */}
+            {/* Icon — rounded container, centered vertically, protruding left */}
             {marker.icon && (
               <div style={{
                 position: 'absolute',
-                left: '-14px',
+                left: '-20px',
                 top: '50%',
                 transform: 'translateY(-50%) rotate(-6deg)',
-                width: '36px',
-                height: '36px',
+                width: '42px',
+                height: '42px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'rgba(255,255,255,0.08)',
-                borderRadius: '10px',
-                border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: '12px',
+                border: `0.5px solid rgba(255,255,255,${hovered ? '0.15' : '0.08'})`,
+                transition: 'all 0.2s ease',
               }}>
                 {React.createElement(marker.icon, {
                   size: 20,
