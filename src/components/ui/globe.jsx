@@ -76,30 +76,20 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            {/* Icon — tilted, anchored to left border */}
+            {/* Icon — filled, half outside card on the left, tilted */}
             {marker.icon && (
               <div style={{
                 position: 'absolute',
-                left: '-8px',
+                left: '-12px',
                 top: '50%',
                 transform: 'translateY(-50%) rotate(-6deg)',
-                transformOrigin: 'bottom center',
-                width: '24px',
-                height: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                borderRadius: '6px',
-                border: '0.5px solid rgba(255,255,255,0.15)',
+                transformOrigin: 'center center',
               }}>
                 {React.createElement(marker.icon, {
-                  size: 14,
-                  weight: 'regular',
-                  color: hovered ? '#4ade80' : 'rgba(255,255,255,0.7)',
-                  style: { transition: 'color 0.2s ease' },
+                  size: 20,
+                  weight: 'fill',
+                  color: hovered ? '#4ade80' : 'rgba(255,255,255,0.85)',
+                  style: { transition: 'color 0.2s ease', filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.4))' },
                 })}
               </div>
             )}
