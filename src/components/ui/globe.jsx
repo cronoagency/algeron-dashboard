@@ -66,35 +66,41 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               fontFamily: 'Inter, sans-serif',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
               background: hovered ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
-              padding: '12px 16px 14px 16px',
-              borderRadius: '10px',
+              padding: '10px 14px 10px 32px',
+              borderRadius: '12px',
               border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
               transition: 'all 0.2s ease',
               boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
               overflow: 'hidden',
-              minWidth: '70px',
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            {/* Icon — filled, bottom-left, half clipped by bottom edge, tilted */}
+            {/* Icon — centered vertically, left side, rounded container half-clipped */}
             {marker.icon && (
               <div style={{
                 position: 'absolute',
-                left: '6px',
-                bottom: '-10px',
-                transform: 'rotate(-6deg)',
-                transformOrigin: 'bottom center',
+                left: '-14px',
+                top: '50%',
+                transform: 'translateY(-50%) rotate(-6deg)',
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(255,255,255,0.08)',
+                borderRadius: '10px',
+                border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
               }}>
                 {React.createElement(marker.icon, {
-                  size: 28,
+                  size: 20,
                   weight: 'fill',
-                  color: hovered ? '#4ade80' : 'rgba(255,255,255,0.45)',
-                  style: {
-                    transition: 'color 0.2s ease',
-                    filter: `drop-shadow(0 0 4px rgba(255,255,255,${hovered ? '0.4' : '0.15'}))`,
-                  },
+                  color: hovered ? '#4ade80' : 'rgba(255,255,255,0.7)',
+                  style: { transition: 'color 0.2s ease' },
                 })}
               </div>
             )}
@@ -104,7 +110,6 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               color: hovered ? '#fff' : 'rgba(255,255,255,0.8)',
               letterSpacing: '0.04em',
               transition: 'color 0.2s ease',
-              paddingLeft: '18px',
             }}>
               {marker.label}
             </span>
