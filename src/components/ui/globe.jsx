@@ -92,11 +92,10 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(255,255,255,0.08)',
+                background: 'rgba(255,255,255,0.06)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 borderRadius: '12px',
-                border: `0.5px solid rgba(255,255,255,${hovered ? '0.15' : '0.08'})`,
                 transition: 'all 0.2s ease',
               }}>
                 {React.createElement(marker.icon, {
