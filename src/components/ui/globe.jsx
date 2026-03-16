@@ -69,23 +69,24 @@ function Marker({ marker, radius, defaultSize, onClick, onHover }) {
               background: hovered ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
-              padding: '6px 12px 6px 28px',
+              padding: '6px 12px 6px 24px',
               borderRadius: '8px',
               border: `0.5px solid rgba(255,255,255,${hovered ? '0.2' : '0.1'})`,
               transition: 'all 0.2s ease',
               boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
+              overflow: 'hidden',
             }}
             onMouseEnter={handlePointerEnter} onMouseLeave={handlePointerLeave} onClick={handleClick}>
-            {/* Icon — filled, glass look, half outside card on the left, tilted */}
+            {/* Icon — filled, half clipped by card edge, tilted */}
             {marker.icon && (
               <div style={{
                 position: 'absolute',
-                left: '-12px',
+                left: '-10px',
                 top: '50%',
                 transform: 'translateY(-50%) rotate(-6deg)',
               }}>
                 {React.createElement(marker.icon, {
-                  size: 20,
+                  size: 28,
                   weight: 'fill',
                   color: hovered ? '#4ade80' : 'rgba(255,255,255,0.5)',
                   style: {
