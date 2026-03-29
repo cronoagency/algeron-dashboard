@@ -6,6 +6,7 @@ import { Terminal } from "./components/Terminal";
 
 import { SelfAnalysis } from "./components/SelfAnalysis";
 import { Systems } from "./components/Systems";
+import { Inbox } from "./components/Inbox";
 
 import {
   ChartLineUp,
@@ -28,7 +29,7 @@ const markers = [
   { lat: 45, lng: 45, label: "Agenzia", icon: Briefcase },
   { lat: 45, lng: 135, label: "Blog", icon: PenNib },
   { lat: 45, lng: -135, label: "Display", icon: Monitor },
-  { lat: 45, lng: -45, label: "File", icon: FolderOpen },
+  { lat: 45, lng: -45, label: "Inbox", icon: FolderOpen },
   { lat: 20, lng: 0, label: "Self-Awareness", icon: Eye },
 ];
 
@@ -114,6 +115,8 @@ export default function App() {
                   <SelfAnalysis />
                 ) : activeSection.label === "Sistemi" ? (
                   <Systems />
+                ) : activeSection.label === "Inbox" ? (
+                  <Inbox />
                 ) : (
                   <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
                     <span className="text-zinc-600 text-sm">Dati in arrivo</span>
