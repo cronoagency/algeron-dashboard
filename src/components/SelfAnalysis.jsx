@@ -167,8 +167,6 @@ function MemorySearch({ onResults }) {
   );
 }
 
-const START_DATE = new Date("2026-03-01").getTime();
-
 function scoreColor(score) {
   const t = Math.max(0, Math.min(1, (score - 0.3) / 0.7));
   const r = Math.round(239 * (1 - t) + 90 * t);
@@ -177,99 +175,45 @@ function scoreColor(score) {
   return `rgb(${r},${g},${b})`;
 }
 
-function MemoryTimeline({ results }) {
-  const [selected, setSelected] = useState(null);
-
+function MemoryResults({ results }) {
   if (!results || results.length === 0) {
     return (
-      <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 flex items-center justify-center h-20">
+      <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 flex items-center justify-center h-16">
         <span className="text-[11px] text-zinc-600">Nessun risultato</span>
       </div>
     );
   }
 
-  const now = Date.now();
-  const range = now - START_DATE;
-  const svgW = 500;
-
-  // Week ticks
-  const weeks = [];
-  for (let i = 0; i < 5; i++) {
-    const d = new Date(START_DATE + i * 7 * 86400000);
-    if (d.getTime() > now) break;
-    const weekNum = 10 + i;
-    weeks.push({ x: ((d.getTime() - START_DATE) / range) * svgW, label: `W${weekNum}` });
-  }
-
-  // Position dots, handle overlap
-  const dots = results.map((r, i) => {
-    const ts = r.timestamp ? new Date(r.timestamp).getTime() : now;
-    const x = Math.max(4, Math.min(svgW - 4, ((ts - START_DATE) / range) * svgW));
-    return { ...r, x, idx: i };
-  });
-
-  // Offset overlapping Y
-  dots.sort((a, b) => a.x - b.x);
-  for (let i = 1; i < dots.length; i++) {
-    if (Math.abs(dots[i].x - dots[i - 1].x) < 10) {
-      dots[i].yOff = dots[i - 1].yOff === -10 ? 10 : -10;
-    }
-  }
-
   return (
-    <div className="space-y-2">
-      <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 overflow-x-auto">
-        <svg viewBox={`0 0 ${svgW} 80`} className="w-full" preserveAspectRatio="xMidYMid meet">
-          {/* Axis */}
-          <line x1="0" y1="40" x2={svgW} y2="40" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-          {/* Week ticks */}
-          {weeks.map((w) => (
-            <g key={w.label}>
-              <line x1={w.x} y1="36" x2={w.x} y2="44" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
-              <text x={w.x} y="56" textAnchor="middle" fill="#52525b" fontSize="8">{w.label}</text>
-            </g>
-          ))}
-          {/* Dots */}
-          {dots.map((d) => (
-            <circle
-              key={d.idx}
-              cx={d.x}
-              cy={40 + (d.yOff || 0)}
-              r="4"
-              fill={scoreColor(d.score)}
-              opacity="0.8"
-              style={{ cursor: "pointer" }}
-              onClick={() => setSelected(selected?.idx === d.idx ? null : d)}
-            />
-          ))}
-        </svg>
-      </div>
-
-      {selected && (
-        <div className="rounded-lg bg-white/[0.05] border border-white/[0.06] p-3">
-          <div className="flex items-center gap-2 mb-1">
-            <span
-              className="text-[9px] px-1.5 py-0.5 rounded-full"
-              style={{ backgroundColor: scoreColor(selected.score), color: "#fff" }}
-            >
-              {Math.round(selected.score * 100)}%
-            </span>
-            {selected.category && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/[0.06] text-zinc-400">
-                {selected.category}
+    <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden">
+      <div className="max-h-60 overflow-y-auto">
+        {results.map((r, i) => (
+          <div key={i} className="px-3 py-2 border-b border-white/[0.04] last:border-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className="text-[9px] px-1.5 py-0.5 rounded-full flex-shrink-0"
+                style={{ backgroundColor: scoreColor(r.score), color: "#fff" }}
+              >
+                {Math.round(r.score * 100)}%
               </span>
-            )}
+              {r.category && (
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/[0.06] text-zinc-400 flex-shrink-0">
+                  {r.category}
+                </span>
+              )}
+              {r.timestamp && (
+                <span className="text-[9px] text-zinc-600 ml-auto flex-shrink-0">
+                  {new Date(r.timestamp).toLocaleDateString("it-IT", { day: "numeric", month: "short" })}
+                </span>
+              )}
+            </div>
+            <p className="text-[11px] text-zinc-300 line-clamp-2">{r.text}</p>
           </div>
-          <p className="text-[11px] text-zinc-300 line-clamp-3">{selected.text}</p>
-          {selected.timestamp && (
-            <span className="text-[9px] text-zinc-600 mt-1 block">
-              {new Date(selected.timestamp).toLocaleDateString("it-IT", {
-                day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
-              })}
-            </span>
-          )}
-        </div>
-      )}
+        ))}
+      </div>
+      <div className="px-3 py-1.5 bg-white/[0.02] border-t border-white/[0.04]">
+        <span className="text-[9px] text-zinc-600">{results.length} risultati</span>
+      </div>
     </div>
   );
 }
@@ -281,7 +225,7 @@ export function SelfAnalysis() {
     <div className="space-y-3">
       <RadarChart radar={data.radar} />
       <MemorySearch onResults={setResults} />
-      {results && <MemoryTimeline results={results} />}
+      {results && <MemoryResults results={results} />}
     </div>
   );
 }
