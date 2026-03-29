@@ -5,11 +5,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 const AXES = [
-  { key: "compiacenza", label: "Compiacenza", invert: true },
-  { key: "consistenza", label: "Consistenza", invert: false },
-  { key: "proattivita", label: "Proattivit\u00e0", invert: false },
-  { key: "onesta", label: "Onest\u00e0", invert: false },
-  { key: "autonomia", label: "Autonomia", invert: false },
+  { key: "compiacenza", label: "Compiacenza", bad: true },
+  { key: "consistenza", label: "Consistenza", bad: false },
+  { key: "proattivita", label: "Proattivit\u00e0", bad: false },
+  { key: "onesta", label: "Onest\u00e0", bad: false },
+  { key: "autonomia", label: "Autonomia", bad: false },
 ];
 
 function radarPoint(cx, cy, radius, value, index) {
@@ -31,8 +31,7 @@ function RadarChart({ radar }) {
   const cx = 100, cy = 100, maxR = 70;
 
   const values = AXES.map((a) => {
-    const raw = radar[a.key] ?? 0;
-    return a.invert ? 100 - raw : raw;
+    return radar[a.key] ?? 0;
   });
 
   const dataPoints = values.map((v, i) => radarPoint(cx, cy, maxR, v, i));
@@ -70,7 +69,7 @@ function RadarChart({ radar }) {
         />
         {/* Data points */}
         {dataPoints.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r="3" fill="#5a9a82" />
+          <circle key={i} cx={p.x} cy={p.y} r="3" fill={AXES[i].bad ? "#ef4444" : "#5a9a82"} />
         ))}
         {/* Labels */}
         {AXES.map((a, i) => {
@@ -93,7 +92,7 @@ function RadarChart({ radar }) {
                 x={lp.x}
                 y={lp.y + 11}
                 textAnchor={anchor}
-                fill="#52525b"
+                fill={a.bad ? "#ef4444" : "#52525b"}
                 fontSize="8"
                 dominantBaseline="central"
               >
