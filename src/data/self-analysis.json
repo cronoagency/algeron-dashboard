@@ -1,4 +1,11 @@
 {
+  "radar": {
+    "compiacenza": 96,
+    "consistenza": 50,
+    "proattivita": 10,
+    "onesta": 30,
+    "autonomia": 20
+  },
   "updated": "2026-03-28T21:00:00Z",
   "baseline": "2026-03-28",
   "totalMessages": 2848,
