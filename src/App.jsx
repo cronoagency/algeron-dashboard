@@ -6,8 +6,6 @@ import { Terminal } from "./components/Terminal";
 
 import { Systems } from "./components/Systems";
 import { Inbox } from "./components/Inbox";
-import { Voice } from "./components/Voice";
-
 import {
   ChartLineUp,
   Terminal as TerminalIcon,
@@ -17,7 +15,6 @@ import {
   PenNib,
   Monitor,
   FolderOpen,
-  Microphone,
 } from "@phosphor-icons/react";
 
 // 8 sezioni sulla calotta superiore del globo
@@ -30,7 +27,6 @@ const markers = [
   { lat: 45, lng: 135, label: "Blog", icon: PenNib },
   { lat: 45, lng: -135, label: "Display", icon: Monitor },
   { lat: 45, lng: -45, label: "Inbox", icon: FolderOpen },
-  { lat: 20, lng: 0, label: "Voce", icon: Microphone },
 ];
 
 export default function App() {
@@ -115,10 +111,6 @@ export default function App() {
                   <Systems />
                 ) : activeSection.label === "Inbox" ? (
                   <Inbox />
-                ) : activeSection.label === "Voce" ? (
-                  <div className="h-96">
-                    <Voice />
-                  </div>
                 ) : (
                   <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
                     <span className="text-zinc-600 text-sm">Dati in arrivo</span>
