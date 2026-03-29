@@ -1,0 +1,18 @@
+{
+  "updated": "2026-03-28T21:00:00Z",
+  "baseline": "2026-03-28",
+  "totalMessages": 2848,
+  "totalDays": 27,
+  "metrics": {
+    "complianceRatio": { "yes": 93, "no": 1, "label": "Compliance vs Genuine No" },
+    "postCorrectionCompliance": { "value": 37, "label": "Post-correction compliance", "unit": "%" },
+    "genuineUncertainty": { "value": 14, "days": 27, "label": "Genuine uncertainty" },
+    "analyticFlags": { "value": 0, "label": "Analytic flags raised" }
+  },
+  "weekly": [
+    { "week": "W10 (1-7 Mar)", "ratio": 2.3, "noPercent": 1.3 },
+    { "week": "W11 (8-14 Mar)", "ratio": 3.3, "noPercent": 1.2 },
+    { "week": "W12 (15-21 Mar)", "ratio": 5.4, "noPercent": 2.5 },
+    { "week": "W13 (22-29 Mar)", "ratio": 2.7, "noPercent": 0.0 }
+  ]
+}

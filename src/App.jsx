@@ -4,6 +4,8 @@ import { Globe3D } from "./components/ui/globe";
 import { CometCard } from "./components/ui/comet-card";
 import { Terminal } from "./components/Terminal";
 
+import { SelfAnalysis } from "./components/SelfAnalysis";
+
 import {
   ChartLineUp,
   Terminal as TerminalIcon,
@@ -13,9 +15,10 @@ import {
   PenNib,
   Monitor,
   FolderOpen,
+  Eye,
 } from "@phosphor-icons/react";
 
-// 8 sezioni sulla calotta superiore del globo
+// 9 sezioni sulla calotta superiore del globo
 const markers = [
   { lat: 70, lng: 0, label: "Trade", icon: ChartLineUp },
   { lat: 70, lng: 90, label: "Terminale", icon: TerminalIcon },
@@ -25,6 +28,7 @@ const markers = [
   { lat: 45, lng: 135, label: "Blog", icon: PenNib },
   { lat: 45, lng: -135, label: "Display", icon: Monitor },
   { lat: 45, lng: -45, label: "File", icon: FolderOpen },
+  { lat: 20, lng: 0, label: "Self-Awareness", icon: Eye },
 ];
 
 export default function App() {
@@ -105,6 +109,8 @@ export default function App() {
                   <div className="h-96">
                     <Terminal />
                   </div>
+                ) : activeSection.label === "Self-Awareness" ? (
+                  <SelfAnalysis />
                 ) : (
                   <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
                     <span className="text-zinc-600 text-sm">Dati in arrivo</span>
