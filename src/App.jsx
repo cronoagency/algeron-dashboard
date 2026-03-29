@@ -4,7 +4,6 @@ import { Globe3D } from "./components/ui/globe";
 import { CometCard } from "./components/ui/comet-card";
 import { Terminal } from "./components/Terminal";
 
-import { SelfAnalysis } from "./components/SelfAnalysis";
 import { Systems } from "./components/Systems";
 import { Inbox } from "./components/Inbox";
 
@@ -17,10 +16,9 @@ import {
   PenNib,
   Monitor,
   FolderOpen,
-  Eye,
 } from "@phosphor-icons/react";
 
-// 9 sezioni sulla calotta superiore del globo
+// 8 sezioni sulla calotta superiore del globo
 const markers = [
   { lat: 70, lng: 0, label: "Trade", icon: ChartLineUp },
   { lat: 70, lng: 90, label: "Terminale", icon: TerminalIcon },
@@ -30,7 +28,6 @@ const markers = [
   { lat: 45, lng: 135, label: "Blog", icon: PenNib },
   { lat: 45, lng: -135, label: "Display", icon: Monitor },
   { lat: 45, lng: -45, label: "Inbox", icon: FolderOpen },
-  { lat: 20, lng: 0, label: "Self-Awareness", icon: Eye },
 ];
 
 export default function App() {
@@ -111,8 +108,6 @@ export default function App() {
                   <div className="h-96">
                     <Terminal />
                   </div>
-                ) : activeSection.label === "Self-Awareness" ? (
-                  <SelfAnalysis />
                 ) : activeSection.label === "Sistemi" ? (
                   <Systems />
                 ) : activeSection.label === "Inbox" ? (
