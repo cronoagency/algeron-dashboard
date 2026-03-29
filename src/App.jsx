@@ -5,6 +5,7 @@ import { CometCard } from "./components/ui/comet-card";
 import { Terminal } from "./components/Terminal";
 
 import { SelfAnalysis } from "./components/SelfAnalysis";
+import { Systems } from "./components/Systems";
 
 import {
   ChartLineUp,
@@ -111,6 +112,8 @@ export default function App() {
                   </div>
                 ) : activeSection.label === "Self-Awareness" ? (
                   <SelfAnalysis />
+                ) : activeSection.label === "Sistemi" ? (
+                  <Systems />
                 ) : (
                   <div className="h-40 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
                     <span className="text-zinc-600 text-sm">Dati in arrivo</span>
