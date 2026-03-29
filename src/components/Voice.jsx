@@ -89,7 +89,7 @@ export function Voice() {
     const wav = encodeWav(pcm, 16000);
 
     try {
-      // Transcribe
+      // Transcribe — the server injects the text into the Claude session
       const res = await fetch(`${API_URL}/voice/transcribe`, {
         method: "POST",
         headers: { Authorization: `Bearer ${API_KEY}`, "Content-Type": "audio/wav" },
@@ -105,42 +105,8 @@ export function Voice() {
       }
 
       setMessages((prev) => [...prev, { role: "user", text }]);
-      setState("thinking");
-      setStatus("Penso...");
-
-      // Claude
-      const clRes = await fetch(`${API_URL}/terminal`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text }),
-      });
-      const clData = await clRes.json();
-      const reply = clData.response || clData.error || "...";
-
-      setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
-      setState("speaking");
-      setStatus("Parlo...");
-
-      // TTS
-      const ttsRes = await fetch(`${API_URL}/voice/speak`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: reply }),
-      });
-      const audioBlob = await ttsRes.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      audio.onended = () => {
-        setState("idle");
-        setStatus("");
-      };
-      audio.play();
+      setStatus(data.injected ? `Iniettato (${data.elapsed}s)` : "Trascritto ma non iniettato");
+      setState("idle");
     } catch (e) {
       setStatus("Errore: " + e.message);
       setState("idle");
